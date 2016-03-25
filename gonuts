@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+set -ehu
+
+unset GOPATH GOROOT
+#PATH=/usr/bin
+
+OS=linux
+ARCH=amd64
+URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
+GIT="https://github.com/golang/go"
+#GIT="$HOME/src/go.git"
+BRANCH="go1.6"
+
+# TODO add OS and ARCH logic
+
+mkdir -p "$HOME/src" || true
+
+# Prints out version details
+versions() {
+    for i in gcc ld make; do
+        $i --version | head -1
+    done
+
+    env | grep GO || true
+    "$HOME/go/bin/go" version || true
+}
+
+# Get and stage go1.4 binaries
+
+fetched="$HOME/go1.4/.fetched"
+if [[ ! -f $fetched ]] ; then
+    mkdir go1.4 || true
+    pushd "$HOME"
+    curl -s "$URL" | tar xvz -C go1.4  --strip-components=1
+    popd
+    touch $fetched
+fi
+
+# clone golang sources from upstream
+[[ ! -d "$HOME/src/go.git/" ]] && git clone -b "$BRANCH" "$GIT" "$HOME/src/go.git/"
+
+# stage in final GOROOT
+[[ ! -d "$HOME/go/" ]] && git clone -b "$BRANCH" "$HOME/src/go.git/" "$HOME/go"
+
+# build go
+if $HOME/go/bin/go version > /dev/null; then
+    versions
+    exit 0
+fi
+pushd "$HOME/go/src"
+./make.bash || versions && exit 1
+popd
+
