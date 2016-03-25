@@ -5,12 +5,17 @@ set -ehu
 unset GOPATH GOROOT
 #PATH=/usr/bin
 
+# This is a hack so we can change HOME form 
+GOROOT_BOOTSTRAP="$HOME/go1.4"
 OS=linux
 ARCH=amd64
-URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
-GIT="https://github.com/golang/go"
-#GIT="$HOME/src/go.git"
+#URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
+URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
+SRC="$HOME/src"
+#GIT="https://github.com/golang/go"
+GIT="/home/strings/src/go.git"
 BRANCH="go1.6"
+TARBALL="$SRC/$(basename $URL)"
 
 # TODO add OS and ARCH logic
 
@@ -26,29 +31,36 @@ versions() {
     "$HOME/go/bin/go" version || true
 }
 
-# Get and stage go1.4 binaries
+# Get go1.4 binaries
+if [[ ! -f "$TARBALL" ]]; then
+    curl -# "$URL" -o "$TARBALL"
+fi
 
-fetched="$HOME/go1.4/.fetched"
-if [[ ! -f $fetched ]] ; then
-    mkdir go1.4 || true
-    pushd "$HOME"
-    curl -s "$URL" | tar xvz -C go1.4  --strip-components=1
-    popd
-    touch $fetched
+# Stage go1.4 binaries
+if [[ ! -d "$HOME/go1.4" ]]; then
+    tar -xf "$TARBALL" -C "$HOME"
+    # FIXME this is hackish. what if go exists
+    mv -v "$HOME/go" "$HOME/go1.4"
 fi
 
 # clone golang sources from upstream
-[[ ! -d "$HOME/src/go.git/" ]] && git clone -b "$BRANCH" "$GIT" "$HOME/src/go.git/"
+if [[ ! -d "$HOME/src/go.git/" ]]; then
+    git clone -b "$BRANCH" "$GIT" "$HOME/src/go.git/"
+fi
 
 # stage in final GOROOT
-[[ ! -d "$HOME/go/" ]] && git clone -b "$BRANCH" "$HOME/src/go.git/" "$HOME/go"
+if [[ ! -d "$HOME/go/" ]]; then
+    git clone -b "$BRANCH" "$HOME/src/go.git/" "$HOME/go"
+fi
 
-# build go
+# Do not build go if go binary exists and works
 if $HOME/go/bin/go version > /dev/null; then
     versions
     exit 0
 fi
-pushd "$HOME/go/src"
-./make.bash || versions && exit 1
-popd
 
+# Finally build go
+(
+    cd "$HOME/go/src"
+    ./make.bash
+)
