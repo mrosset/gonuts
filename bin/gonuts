@@ -5,20 +5,25 @@ set -ehu
 unset GOPATH GOROOT
 #PATH=/usr/bin
 
-# This is a hack so we can change HOME form 
+# This is a hack so we can change HOME form
+# TODO add OS and ARCH logic
 GOROOT_BOOTSTRAP="$HOME/go1.4"
 OS=linux
 ARCH=amd64
-#URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
-URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
+
+# Final
+URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
+GIT="https://github.com/golang/go"
+
+# Testing
+#URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
+#GIT="/home/strings/src/go.git"
+
 SRC="$HOME/src"
-#GIT="https://github.com/golang/go"
-GIT="/home/strings/src/go.git"
 BRANCH="go1.6"
 TARBALL="$SRC/$(basename $URL)"
 
-# TODO add OS and ARCH logic
-
+# FIXME should only create this directory if we need to.
 mkdir -p "$HOME/src" || true
 
 # Prints out version details
