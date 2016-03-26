@@ -6,14 +6,15 @@ unset GOPATH GOROOT
 #PATH=/usr/bin
 
 # This is a hack so we can change HOME form
-# TODO add OS and ARCH logic
 GOROOT_BOOTSTRAP="$HOME/go1.4"
+
+# TODO add better OS and ARCH logic
 OS=linux
 ARCH=amd64
 
 # Final
-URL="https://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
-GIT="https://github.com/golang/go"
+URL="http://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
+GIT="http://github.com/golang/go"
 
 # Testing
 #URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
