@@ -2,4 +2,4 @@ test:
 	./bin/gonuts
 
 clean:
-	-rm -rf cache
+	-rm -rf out
