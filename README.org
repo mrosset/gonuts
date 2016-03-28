@@ -1,1 +1,13 @@
 #+TITLE: Gonuts
+
+* gonuts:
+downloads and bootstraps the latest stable golang tools and compiler.
+
+* Installing
+ git clone https://github.com/str1ngs/gonuts
+
+* Bootstrapping the toolchain.
+** To boostrap run
+#+BEGIN_SRC shell
+bin/gonuts
+#+END_SRC

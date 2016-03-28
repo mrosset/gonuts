@@ -1,5 +1,5 @@
 test:
-	HOME=${PWD}/tmp bin/gonuts
+	./bin/gonuts
 
 clean:
-	-rm -rf ./tmp
+	-rm -rf cache
