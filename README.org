@@ -1,13 +1,21 @@
 #+TITLE: Gonuts
 
-* gonuts:
-downloads and bootstraps the latest stable golang tools and compiler.
+* gonuts: (alpha)
+Downloads and builds the latest stable golang tools and compiler.
 
 * Installing
+#+BEGIN_SRC shell
  git clone https://github.com/str1ngs/gonuts
+#+END_SRC
 
-* Bootstrapping the toolchain.
-** To boostrap run
+* Building the toolchain.
+** To bootstrap run
 #+BEGIN_SRC shell
 bin/gonuts
 #+END_SRC
+
+** Relocate the toolchain
+#+BEGIN_SRC shell
+mv out/go1.6 "$HOME/go"
+#+END_SRC
+Make sure you add "$HOME/go/bin" to PATH
