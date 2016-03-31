@@ -9,12 +9,12 @@ OS=linux
 ARCH=amd64
 
 # Final
-#URL="http://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
-#GIT="https://github.com/golang/go"
+URL="http://storage.googleapis.com/golang/go1.4.3.${OS}-${ARCH}.tar.gz"
+#URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
 
 # Testing
-#URL="http://localhost/go1.4.3.${OS}-${ARCH}.tar.gz"
-GIT_URL="/home/strings/src/go.git"
+#GIT_URL="/home/strings/src/go.git"
+GIT_URL="https://github.com/golang/go"
 GIT_REPO="out/git.git"
 export GOROOT_BOOTSTRAP="$PWD/out/go1.4"
 GO1_6="out/go1.6"
